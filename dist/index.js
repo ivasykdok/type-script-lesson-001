@@ -19,9 +19,11 @@ const calcAge = (birthDay) => {
     return Math.abs(dateAge.getUTCFullYear() - 1970);
 };
 user.age = calcAge(user.birthDay);
-const readUserData = (user) => {
-    const { firstName, lastName, birthDay, age, email, phone, isMarried, tags, isConfirmed } = user;
-    console.log("%c user: ", "color: white; background-color: #007acc; border-radius: 4px; font-weight: bold;", firstName, lastName, birthDay, age, email, phone, isMarried, tags, isConfirmed);
+const readUserData = (password, email) => {
+    if (user.password === password && user.email === email) {
+        user.isConfirmed = true;
+    }
+    console.log(`User: ${user.firstName} ${user.lastName} is confirmed: ${user.isConfirmed}`);
 };
-readUserData(user);
+readUserData(user.password, user.email);
 //# sourceMappingURL=index.js.map

@@ -5,7 +5,7 @@ type User = {
   firstName: string;
   lastName: string;
   birthDay: Date;
-  phone?: string | number | undefined;
+  phone?: string | number | undefined | null;
   age?: number;
   readonly email: string;
   readonly username: string;
@@ -37,21 +37,12 @@ const calcAge = (birthDay: Date): number => {
 };
 user.age = calcAge(user.birthDay);
 
-const readUserData = (user: User): void => {
-  const { firstName, lastName, birthDay, age, email, phone, isMarried, tags, isConfirmed } = user;
-  console.log(
-    "%c user: ",
-    "color: white; background-color: #007acc; border-radius: 4px; font-weight: bold;",
-    firstName,
-    lastName,
-    birthDay,
-    age,
-    email,
-    phone,
-    isMarried,
-    tags,
-    isConfirmed
-  );
+const readUserData = ( password: string, email: string,): void => {
+  if(user.password === password && user.email === email) {
+    user.isConfirmed = true;
+  }
+
+  console.log(`User: ${user.firstName} ${user.lastName} is confirmed: ${user.isConfirmed}`);
 };
 
-readUserData(user);
+readUserData(user.password, user.email);
