@@ -1,0 +1,92 @@
+[
+  {
+    "id": "1",
+    "title": "Design project dashboard UI",
+    "description": "Create a modern, responsive dashboard layout with task overview and activity feed.",
+    "createdAt": "2025-10-01T09:00:00Z",
+    "status": "todo",
+    "priority": "high",
+    "deadline": "2025-10-10T23:59:00Z"
+  },
+  {
+    "id": "2",
+    "title": "Set up backend API",
+    "description": "Implement CRUD endpoints for tasks using Node.js and Express.",
+    "createdAt": "2025-10-02T10:30:00Z",
+    "status": "todo",
+    "priority": "high",
+    "deadline": "2025-10-12T23:59:00Z"
+  },
+  {
+    "id": "3",
+    "title": "Implement authentication",
+    "description": "Add JWT-based authentication and role management for users.",
+    "createdAt": "2025-10-03T11:15:00Z",
+    "status": "todo",
+    "priority": "medium",
+    "deadline": "2025-10-14T23:59:00Z"
+  },
+  {
+    "id": "4",
+    "title": "Integrate database",
+    "description": "Connect MongoDB and create task and user schemas with validation.",
+    "createdAt": "2025-10-04T12:45:00Z",
+    "status": "in_progress",
+    "priority": "high",
+    "deadline": "2025-10-11T23:59:00Z"
+  },
+  {
+    "id": "5",
+    "title": "Build task creation form",
+    "description": "Create a React form with validation for adding new tasks to the system.",
+    "createdAt": "2025-10-05T09:20:00Z",
+    "status": "todo",
+    "priority": "medium",
+    "deadline": "2025-10-13T23:59:00Z"
+  },
+  {
+    "id": "6",
+    "title": "Implement task filters and sorting",
+    "description": "Add filtering by status, priority, and deadline, and implement sorting options.",
+    "createdAt": "2025-10-05T13:40:00Z",
+    "status": "todo",
+    "priority": "low",
+    "deadline": "2025-10-18T23:59:00Z"
+  },
+  {
+    "id": "7",
+    "title": "Add drag-and-drop for tasks",
+    "description": "Enable drag-and-drop functionality between task columns (To Do, In Progress, Done).",
+    "createdAt": "2025-10-06T10:00:00Z",
+    "status": "in_progress",
+    "priority": "high",
+    "deadline": "2025-10-17T23:59:00Z"
+  },
+  {
+    "id": "8",
+    "title": "Create user profile page",
+    "description": "Add profile editing, avatar upload, and task statistics section.",
+    "createdAt": "2025-09-06T14:30:00Z",
+    "status": "done",
+    "priority": "medium",
+    "deadline": "2025-10-20T23:59:00Z"
+  },
+  {
+    "id": "9",
+    "title": "Implement notifications system",
+    "description": "Add in-app and email notifications for deadlines and task updates.",
+    "createdAt": "2025-10-07T09:45:00Z",
+    "status": "todo",
+    "priority": "high",
+    "deadline": "2025-10-22T23:59:00Z"
+  },
+  {
+    "id": "10",
+    "title": "Polish UI and deploy MVP",
+    "description": "Fix UI inconsistencies, test responsiveness, and deploy the MVP to production.",
+    "createdAt": "2025-10-07T12:10:00Z",
+    "status": "todo",
+    "priority": "high",
+    "deadline": "2025-10-25T23:59:00Z"
+  }
+]
