@@ -19,13 +19,19 @@ const TaskArraySchema = z.array(TaskSchema);
 
 const parsedTasks = TaskArraySchema.safeParse(tasks);
 
-const findTaskById = (id: string | number = 1) => {
+const ensureTasksValid = (): TaskNew[] | null => {
   if (!parsedTasks.success) {
-    console.error("Неможливо отримати таск — дані невалідні.");
+    console.error("Дані невалідні.");
     return null;
   }
+  return parsedTasks.data;
+};
 
-  const task = parsedTasks.data.find((t) => String(t.id) === String(id));
+const findTaskById = (id: string = '1') => {
+  const tasks = ensureTasksValid();
+  if (!tasks) return null;
+
+  const task = tasks.find((t) => t.id === String(id));
 
   if (!task) {
     console.warn(`Завдання з id="${id}" не знайдено.`);
@@ -35,47 +41,52 @@ const findTaskById = (id: string | number = 1) => {
   return task;
 };
 
-const createTask = (
-  taskData: Partial<Omit<TaskNew, "id">> & { id?: string },
-): TaskNew | null => {
-  const newId = taskData.id ?? Date.now().toString();
+const createTask = (taskData: Omit<TaskNew, "id">): TaskNew | null => {
+  const tasks = ensureTasksValid();
+  if (!tasks) return null;
 
-  const existingTask = findTaskById(newId);
-
-  if (existingTask) {
-    console.warn(`⚠️ Завдання з id="${newId}" вже існує.`);
-    return null;
-  }
+  const newId = Date.now().toString();
 
   const taskToParse: TaskNew = {
     id: newId,
-    title: taskData.title ?? "Нова задача",
-    description: taskData.description,
-    createdAt: taskData.createdAt ?? new Date().toISOString(),
-    deadline: taskData.deadline ?? new Date().toISOString(),
-    status: taskData.status ?? DEFAULT_STATUS,
-    priority: taskData.priority ?? DEFAULT_PRIORITY,
+    ...taskData,
   };
 
-  return TaskSchema.parse(taskToParse);
-};
+  const parsed = TaskSchema.safeParse(taskToParse);
 
-const updateTask = (
-  id: string | number,
-  updates: Partial<Omit<TaskNew, "id">>,
-): TaskNew | null => {
-  if (!parsedTasks.success) {
-    console.error("Дані невалідні, не можна оновлювати таск.");
+  if (!parsed.success) {
+    console.error("Не вдалося створити таск, дані невалідні:", parsed.error.issues);
     return null;
   }
 
-  const index = parsedTasks.data.findIndex((t) => String(t.id) === String(id));
+  tasks.push(parsed.data);
+
+  console.log(`Таск "${parsed.data.title}" створено з id=${parsed.data.id}`);
+  return parsed.data;
+};
+createTask({
+  title: "Модифікувати функцію створити",
+  description: "Ознайомитися з базовими можливостями бібліотеки Zod",
+  createdAt: new Date().toISOString(),
+  deadline: "2025-11-01",
+  status: "todo",
+  priority: "medium",
+});
+
+const updateTask = (
+  id: string,
+  updates: Partial<Omit<TaskNew, "id">>,
+): TaskNew | null => {
+  const tasks = ensureTasksValid();
+  if (!tasks) return null;
+
+  const index = tasks.findIndex((t) => t.id === id);
   if (index === -1) {
     console.warn(`Завдання з id="${id}" не знайдено.`);
     return null;
   }
 
-  const existingTask = parsedTasks.data[index];
+  const existingTask = tasks[index];
   if (!existingTask) {
     console.error("Не вдалося знайти таск у масиві.");
     return null;
@@ -89,7 +100,6 @@ const updateTask = (
   };
 
   const parsed = TaskSchema.safeParse(updatedTask);
-
   if (!parsed.success) {
     console.error(
       "Не вдалося оновити таск, дані невалідні:",
@@ -98,40 +108,36 @@ const updateTask = (
     return null;
   }
 
-  parsedTasks.data[index] = parsed.data;
+  tasks[index] = parsed.data;
 
-  console.log(parsed.data);
+  console.log("Оновлено:", parsed.data);
   return parsed.data;
 };
-/*updateTask(2, {
+/*updateTask('2', {
   description: "new task"
 })*/
 
-const deleteTask = (id: string | number): boolean => {
-  if (!parsedTasks.success) {
-    console.error("Дані невалідні, не можна видаляти таск.");
-    return false;
-  }
+const deleteTask = (id: string): boolean => {
+  const tasks = ensureTasksValid();
+  if (!tasks) return false;
 
-  const index = parsedTasks.data.findIndex((t) => String(t.id) === String(id));
+  const index = tasks.findIndex((t) => t.id === String(id));
   if (index === -1) {
     console.warn(`Завдання з id="${id}" не знайдено.`);
     return false;
   }
 
-  parsedTasks.data.splice(index, 1);
+  tasks.splice(index, 1);
   console.log(`Завдання з id="${id}" успішно видалено.`);
   return true;
 };
-/*deleteTask(1)*/
+/*deleteTask("1")*/
 
 const filterTasks = (filters: FilterOptions): TaskNew[] => {
-  if (!parsedTasks.success) {
-    console.error("Дані невалідні, не можна фільтрувати.");
-    return [];
-  }
+  const tasks = ensureTasksValid();
+  if (!tasks) return [];
 
-  return parsedTasks.data.filter((task) => {
+  return tasks.filter((task) => {
     const createdAt = new Date(task.createdAt);
 
     const statusMatch = !filters.status || task.status === filters.status;
@@ -155,13 +161,11 @@ const filterTasks = (filters: FilterOptions): TaskNew[] => {
   createdAfter: "2025-01-01",
 });*/
 
-const isTaskCompletedBeforeDeadline = (id: string | number): boolean | null => {
-  if (!parsedTasks.success) {
-    console.error("Дані невалідні.");
-    return null;
-  }
+const isTaskCompletedBeforeDeadline = (id: string): boolean | null => {
+  const tasks = ensureTasksValid();
+  if (!tasks) return false;
 
-  const task = parsedTasks.data.find((t) => String(t.id) === String(id));
+  const task = tasks.find((t) => String(t.id) === String(id));
   if (!task) {
     console.warn(`Завдання з id="${id}" не знайдено.`);
     return null;
