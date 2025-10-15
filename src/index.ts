@@ -4,7 +4,7 @@ import { DEFAULT_PRIORITY, DEFAULT_STATUS } from "./constants/constants";
 import { FilterOptions } from "./types/Types";
 
 const TaskSchema = z.object({
-  id: z.union([z.string(), z.number()]),
+  id: z.string(),
   title: z.string(),
   description: z.string().optional(),
   createdAt: z.union([z.string(), z.date()]),
@@ -36,9 +36,9 @@ const findTaskById = (id: string | number = 1) => {
 };
 
 const createTask = (
-  taskData: Partial<Omit<TaskNew, "id">> & { id?: string | number },
+  taskData: Partial<Omit<TaskNew, "id">> & { id?: string },
 ): TaskNew | null => {
-  const newId = taskData.id ?? Date.now();
+  const newId = taskData.id ?? Date.now().toString();
 
   const existingTask = findTaskById(newId);
 
