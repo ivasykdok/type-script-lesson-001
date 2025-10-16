@@ -32,7 +32,7 @@ const findTaskById = (id: string = "1") => {
   const tasks = ensureTasksValid();
   if (!tasks) return null;
 
-  const task = tasks.find((t) => t.id === String(id));
+  const task = tasks.find((t) => t.id === id);
 
   if (!task) {
     console.warn(`Завдання з id="${id}" не знайдено.`);
