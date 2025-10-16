@@ -2,6 +2,7 @@ import tasks from "../tasks.json";
 import { z } from "zod";
 import { DEFAULT_PRIORITY, DEFAULT_STATUS } from "./constants/constants";
 import { FilterOptions } from "./types/Types";
+import { StatusSchema, StatusPriority } from "./constants/constants";
 
 const TaskSchema = z.object({
   id: z.string(),
@@ -9,8 +10,8 @@ const TaskSchema = z.object({
   description: z.string().optional(),
   createdAt: z.union([z.string(), z.date()]),
   deadline: z.union([z.string(), z.date()]),
-  status: z.enum(["todo", "in_progress", "done"]).default(DEFAULT_STATUS),
-  priority: z.enum(["low", "medium", "high"]).default(DEFAULT_PRIORITY),
+  status: StatusSchema.default(DEFAULT_STATUS),
+  priority: StatusPriority.default(DEFAULT_PRIORITY),
 });
 
 type TaskNew = z.infer<typeof TaskSchema>;
@@ -27,7 +28,7 @@ const ensureTasksValid = (): TaskNew[] | null => {
   return parsedTasks.data;
 };
 
-const findTaskById = (id: string = '1') => {
+const findTaskById = (id: string = "1") => {
   const tasks = ensureTasksValid();
   if (!tasks) return null;
 
@@ -55,7 +56,10 @@ const createTask = (taskData: Omit<TaskNew, "id">): TaskNew | null => {
   const parsed = TaskSchema.safeParse(taskToParse);
 
   if (!parsed.success) {
-    console.error("Не вдалося створити таск, дані невалідні:", parsed.error.issues);
+    console.error(
+      "Не вдалося створити таск, дані невалідні:",
+      parsed.error.issues,
+    );
     return null;
   }
 
@@ -121,7 +125,7 @@ const deleteTask = (id: string): boolean => {
   const tasks = ensureTasksValid();
   if (!tasks) return false;
 
-  const index = tasks.findIndex((t) => t.id === String(id));
+  const index = tasks.findIndex((t) => t.id === id);
   if (index === -1) {
     console.warn(`Завдання з id="${id}" не знайдено.`);
     return false;
@@ -165,7 +169,7 @@ const isTaskCompletedBeforeDeadline = (id: string): boolean | null => {
   const tasks = ensureTasksValid();
   if (!tasks) return false;
 
-  const task = tasks.find((t) => String(t.id) === String(id));
+  const task = tasks.find((t) => t.id === id);
   if (!task) {
     console.warn(`Завдання з id="${id}" не знайдено.`);
     return null;

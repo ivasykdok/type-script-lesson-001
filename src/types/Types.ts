@@ -1,7 +1,10 @@
-import { Priority, Status } from "../constants/constants";
+import { priorities, statuses } from "../constants/constants";
+
+export type Status = typeof statuses[number];
+export type Priority = typeof priorities[number];
 
 export type Task = {
-  id: string | number;
+  id: string;
   title: string;
   description?: string;
   createdAt: Date | string;
