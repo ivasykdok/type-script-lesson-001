@@ -4,10 +4,54 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./index.css" />
     <title>vite-project</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <h1>Task Manager</h1>
+
+      <div class="wrap">
+        <form id="taskForm">
+          <label>Назва:
+            <input type="text" name="title" required />
+          </label>
+          <label>Опис:
+            <input type="text" name="description" />
+          </label>
+          <label>Статус:
+            <select name="status">
+              <option value="todo">Todo</option>
+              <option value="in-progress">In-progress</option>
+              <option value="done">Done</option>
+            </select>
+          </label>
+          <label>Пріоритет:
+            <select name="priority">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </label>
+          <label>
+            Дедлайн:
+            <input type="date" name="deadline" />
+          </label>
+          <button type="submit">Створити завдання</button>
+        </form>
+
+        <div class="descr"></div>
+      </div>
+
+      <h2>Список завдань</h2>
+      <div class="note">
+        <span>Назва</span>
+        <span>Опис</span>
+        <span>Пріоритет</span>
+        <span>Дедлайн</span>
+      </div>
+      <ul id="taskList"></ul>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -1,0 +1,43 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 2rem;
+}
+.wrap {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+form {
+  margin-bottom: 2rem;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+  max-width: 200px;
+
+}
+input,
+select {
+  width: 100%;
+  height: 30px;
+  margin-top: 0.2rem;
+}
+button {
+  margin-top: 1rem;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+li, .note {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.remove {
+  margin: 0;
+  height: 25px;
+}
