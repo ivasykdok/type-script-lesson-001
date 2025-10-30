@@ -2,10 +2,11 @@ import { BaseTask } from "./BaseTask";
 
 export class Story extends BaseTask {
   points: number;
-  constructor(id: string, title: string, status: string, priority: string, points: number) {
-    super(id, title, status, priority);
+  constructor(points: number, ...args: ConstructorParameters<typeof BaseTask>) {
+    super(...args);
     this.points = points;
   }
+
   getTaskInfo() {
     return `Story: ${this.title}, Points: ${this.points}`;
   }

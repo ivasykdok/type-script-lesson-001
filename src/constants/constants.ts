@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Priority, Status } from "../types/Types";
+import { Priority, Status } from "./Types";
 
 export const statuses = ["todo", "in_progress", "done"] as const;
 export const priorities = ["low", "medium", "high"] as const;

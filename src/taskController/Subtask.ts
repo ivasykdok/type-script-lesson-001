@@ -4,17 +4,14 @@ export class Subtask extends BaseTask {
   parentId: string;
 
   constructor(
-    id: string,
-    title: string,
-    status: string,
-    priority: string,
-    parentId: string
+    parentId: string,
+    ...args: ConstructorParameters<typeof BaseTask>
   ) {
-    super(id, title, status, priority);
+    super(...args);
     this.parentId = parentId;
   }
 
   getTaskInfo() {
-    return `Subtask of ${this.parentId}: ${this.title}`;
+    return `Subtask of ${this.parentId}: ${this.title}, Status: ${this.status}`;
   }
 }

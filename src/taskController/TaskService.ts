@@ -1,4 +1,4 @@
-import { FilterOptions, Task, TaskNew } from "../types/Types";
+import { FilterOptions, Task } from "../constants/Types";
 import { z } from "zod";
 import { TaskSchema } from "../constants/constants";
 import tasks from "../../tasks.json";
@@ -6,34 +6,24 @@ import tasks from "../../tasks.json";
 const TaskArraySchema = z.array(TaskSchema);
 
 export class TaskService {
-  constructor(private tasks: TaskNew[] = []) {
-    const parsedTasks = TaskArraySchema.safeParse(tasks);
-    if (parsedTasks.success) {
-      this.tasks = parsedTasks.data;
-    } else {
-      console.error("Дані tasks.json невалідні:", parsedTasks.error.issues);
-    }
-  }
+  private tasks: Task[];
 
-  private ensureTasksValid(): TaskNew[] | null {
-    const parsed = TaskArraySchema.safeParse(this.tasks);
+  constructor(initialTasks: Task[] = tasks as Task[]) {
+    const parsed = TaskArraySchema.safeParse(initialTasks);
     if (!parsed.success) {
-      console.error(
-        "Дані всередині TaskService невалідні:",
-        parsed.error.issues,
-      );
-      return null;
+      this.tasks = [];
+
+      console.error("Дані tasks.json невалідні:", parsed.error.issues);
+    } else {
+      this.tasks = parsed.data;
+      console.log(`Ініціалізовано ${this.tasks.length} тасків`);
     }
-    return parsed.data;
   }
 
-  createTask = (taskData: Omit<TaskNew, "id">): TaskNew | null => {
-    const validTasks = this.ensureTasksValid();
-    if (!validTasks) return null;
-
+  createTask = (taskData: Omit<Task, "id">): Task | null => {
     const newId = Date.now().toString();
 
-    const taskToParse: TaskNew = {
+    const taskToParse: Task = {
       id: newId,
       ...taskData,
     };
@@ -54,9 +44,7 @@ export class TaskService {
     return parsed.data;
   };
 
-  findTaskById = (id: string = "1") => {
-    if (!this.ensureTasksValid()) return null;
-
+  findTaskById = (id: string) => {
     const task = this.tasks.find((t) => t.id === id);
 
     if (!task) {
@@ -69,10 +57,8 @@ export class TaskService {
 
   updateTask = (
     id: string,
-    updates: Partial<Omit<TaskNew, "id">>,
-  ): TaskNew | null => {
-    if (!this.ensureTasksValid()) return null;
-
+    updates: Partial<Omit<Task, "id">>,
+  ): Task | null => {
     const index = this.tasks.findIndex((t) => t.id === id);
     if (index === -1) {
       console.warn(`Завдання з id="${id}" не знайдено.`);
@@ -108,8 +94,6 @@ export class TaskService {
   };
 
   deleteTask = (id: string): boolean => {
-    if (!this.ensureTasksValid()) return false;
-
     const index = this.tasks.findIndex((t) => t.id === id);
     if (index === -1) {
       console.warn(`Завдання з id="${id}" не знайдено.`);
@@ -121,9 +105,7 @@ export class TaskService {
     return true;
   };
 
-  filterTasks = (filters: FilterOptions): TaskNew[] => {
-    if (!this.ensureTasksValid()) return [];
-
+  filterTasks = (filters: FilterOptions): Task[] => {
     return this.tasks.filter((task) => {
       const createdAt = new Date(task.createdAt);
 
@@ -143,8 +125,6 @@ export class TaskService {
   };
 
   isTaskCompletedBeforeDeadline = (id: string): boolean | null => {
-    if (!this.ensureTasksValid()) return null;
-
     const task = this.tasks.find((t) => t.id === id);
     if (!task) {
       console.warn(`Завдання з id="${id}" не знайдено.`);

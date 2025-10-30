@@ -1,16 +1,16 @@
-import { TaskService } from "../taskService/TaskService";
-import { FilterOptions, TaskNew } from "../types/Types";
+import { TaskService } from "./TaskService";
+import { FilterOptions, Task } from "../constants/Types";
 
 export class TaskController {
   constructor(private taskService: TaskService) {
     this.taskService = taskService;
   }
 
-  createTask(data: Omit<TaskNew, "id">): TaskNew | null {
+  createTask(data: Omit<Task, "id">): Task | null {
     return this.taskService.createTask(data);
   }
 
-  getTaskById(id: string): TaskNew | null {
+  getTaskById(id: string): Task | null {
     return this.taskService.findTaskById(id);
   }
 
@@ -18,7 +18,7 @@ export class TaskController {
     return this.taskService.deleteTask(id);
   }
 
-  filterTasks(filters: FilterOptions): TaskNew[] {
+  filterTasks(filters: FilterOptions): Task[] {
     return this.taskService.filterTasks(filters);
   }
 
