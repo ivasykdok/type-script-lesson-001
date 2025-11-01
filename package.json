@@ -12,12 +12,10 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "json-server": "^1.0.0-beta.3",
-    "pettier": "^1.1.0",
     "prettier": "^3.6.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.65.0",
-    "react-router-dom": "^7.9.5",
     "zod": "^4.1.12"
   },
   "devDependencies": {
