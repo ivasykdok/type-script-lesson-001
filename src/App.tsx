@@ -1,12 +1,9 @@
 import "./App.css";
-import CreateTaskForm from "./CreateTaskForm/CreateTaskForm.tsx";
+import { RouterProvider } from "react-router-dom";
+import router from "./router.tsx";
 
 function App() {
-  return (
-    <>
-      <CreateTaskForm />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
