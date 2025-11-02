@@ -19,6 +19,10 @@ const Homepage = () => {
     fetchTasks();
   }, []);
 
+  const navigateHandler = (id: string) => {
+    navigate(`/tasks/${id}`);
+  };
+
   const createTaskHandler = () => {
     navigate("/tasks/create");
   };
@@ -28,12 +32,25 @@ const Homepage = () => {
       <div className="wrapper">
         <ul className="task_list">
           {taskList.length > 0 ? (
-            taskList.map((task) => (
-              <li key={task.id} className={"item"}>
-                <span>{task.createdAt}</span>
-                {task.id}
-              </li>
-            ))
+            taskList.map((task) => {
+              const date = new Date(task.createdAt).toLocaleDateString("uk-UA");
+              const deadline = task.deadline
+                ? new Date(task.deadline).toLocaleDateString("uk-UA")
+                : "—";
+              return (
+                <li
+                  key={task.id}
+                  className={"item"}
+                  onClick={() => navigateHandler(task.id)}
+                >
+                  <span>{date}</span>
+                  <span>{task.title}</span>
+                  <span>{task.description}</span>
+                  <span>{deadline}</span>
+                  <span>{task.taskStatus}</span>
+                </li>
+              );
+            })
           ) : (
             <li className={"empty"}>Task list is empty</li>
           )}

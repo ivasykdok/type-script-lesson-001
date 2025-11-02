@@ -1,4 +1,4 @@
-import type { Task } from "../types.tsx";
+import type { CreateTaskPayload, Task } from "../types.tsx";
 
 export class ApiService {
   private apiUrl: string;
@@ -29,7 +29,7 @@ export class ApiService {
     }
   }
 
-  async createTask(taskData: Task): Promise<Task | null> {
+  async createTask(taskData: CreateTaskPayload): Promise<Task | null> {
     try {
       const response = await fetch(this.apiUrl, {
         method: "POST",
