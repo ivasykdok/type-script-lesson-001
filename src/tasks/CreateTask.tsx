@@ -1,9 +1,17 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router-dom";
-import { type CreateTaskData, statuses, taskSchema } from "../types.tsx";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  type CreateTaskData,
+  type CreateTaskPayload,
+  statuses,
+  taskSchema,
+} from "../types.tsx";
+import { ApiController } from "../api/apiController.tsx";
 
 const CreateTask = () => {
+  const navigate = useNavigate();
+  const api = new ApiController();
   const {
     register,
     handleSubmit,
@@ -14,12 +22,18 @@ const CreateTask = () => {
     resolver: zodResolver(taskSchema),
   });
 
-  const onSubmit = (data: CreateTaskData) => {
-    console.log(
-      "%c data ",
-      "color: white; background-color: #007acc; border-radius: 4px; font-weight: bold;",
-      data,
-    );
+  const onSubmit = async (data: CreateTaskData) => {
+    const payload: CreateTaskPayload = {
+      ...data,
+      createdAt: new Date().toISOString(),
+      deadline: data.deadline ? new Date(data.deadline).toISOString() : null,
+    };
+    const results = await api.createTask(payload);
+
+    if (results) {
+      reset();
+      navigate("/");
+    }
   };
 
   return (
@@ -53,7 +67,7 @@ const CreateTask = () => {
 
         <div className="wrap">
           <label htmlFor="statuses">Status:</label>
-          <select id="statuses" {...register("taskStatus")}>
+          <select id="statuses" {...register("status")}>
             {statuses.map((status, index) => {
               return (
                 <option key={index} value={status}>

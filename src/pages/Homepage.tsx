@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ApiController } from "../api/apiController.tsx";
-import type { Task } from "../types.tsx";
+import type { TaskData } from "../types.tsx";
 
 const Homepage = () => {
   const navigate = useNavigate();
   const api = new ApiController();
 
-  const [taskList, setTaskList] = useState<Task[]>([]);
+  const [taskList, setTaskList] = useState<TaskData[]>([]);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -16,7 +16,7 @@ const Homepage = () => {
       setTaskList(tasks);
     };
 
-    fetchTasks(); // <-- обов'язково викликаємо функцію
+    fetchTasks();
   }, []);
 
   const createTaskHandler = () => {
@@ -28,7 +28,11 @@ const Homepage = () => {
       <div className="wrapper">
         <ul className="task_list">
           {taskList.length > 0 ? (
-            taskList.map((task) => <li>{task.id}</li>)
+            taskList.map((task) => (
+              <li key={task.id} className={"item"}>
+                {task.id}
+              </li>
+            ))
           ) : (
             <li className={"empty"}>Task list is empty</li>
           )}

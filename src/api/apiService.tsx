@@ -1,4 +1,4 @@
-import type { Task } from "../types.tsx";
+import type { TaskData } from "../types.tsx";
 
 export class ApiService {
   private apiUrl: string;
@@ -7,7 +7,7 @@ export class ApiService {
     this.apiUrl = apiUrl;
   }
 
-  async fetchAllTasks(): Promise<Task[]> {
+  async fetchAllTasks(): Promise<TaskData[]> {
     try {
       const response = await fetch(this.apiUrl, {
         method: "GET",
@@ -26,6 +26,29 @@ export class ApiService {
     } catch (error) {
       console.error(new Error(`Fetch all task is error: ${error}`));
       return [];
+    }
+  }
+
+  async createTask(taskData: TaskData): Promise<TaskData | null> {
+    try {
+      const response = await fetch(this.apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(taskData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      console.error(new Error(`Created task is error: ${error}`));
+      return null;
     }
   }
 }

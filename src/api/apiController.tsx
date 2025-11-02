@@ -40,7 +40,7 @@ export class TaskController {
 }
 */
 
-import type { Task } from "../types.tsx";
+import type { CreateTaskPayload, TaskData } from "../types.tsx";
 import { ApiService } from "./apiService.tsx";
 
 export class ApiController {
@@ -50,7 +50,11 @@ export class ApiController {
     this.apiService = new ApiService();
   }
 
-  async getAllTasks(): Promise<Task[]> {
+  async getAllTasks(): Promise<TaskData[]> {
     return await this.apiService.fetchAllTasks();
+  }
+
+  async createTask(data: CreateTaskPayload): Promise<TaskData | null> {
+    return await this.apiService.createTask(data);
   }
 }

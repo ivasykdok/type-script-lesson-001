@@ -10,16 +10,15 @@ export interface TaskData {
   deadline?: string;
 }
 
-export interface Task extends TaskData {
-  id: string;
-}
 
 export const taskSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string(),
-  taskStatus: z.enum(statuses).default("todo"),
+  status: z.enum(statuses).default("todo"),
   createdAt: z.string().optional(),
   deadline: z.string().nullable().optional(),
 });
 
 export type CreateTaskData = z.infer<typeof taskSchema>;
+
+export type CreateTaskPayload = Omit<CreateTaskData, "createdAt"> & { createdAt: string };
