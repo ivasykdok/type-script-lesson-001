@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ApiController } from "../api/apiController.tsx";
-import type { TaskData } from "../types.tsx";
+import type { Task } from "../types.tsx";
 
 const Homepage = () => {
   const navigate = useNavigate();
   const api = new ApiController();
 
-  const [taskList, setTaskList] = useState<TaskData[]>([]);
+  const [taskList, setTaskList] = useState<Task[]>([]);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -30,6 +30,7 @@ const Homepage = () => {
           {taskList.length > 0 ? (
             taskList.map((task) => (
               <li key={task.id} className={"item"}>
+                <span>{task.createdAt}</span>
                 {task.id}
               </li>
             ))

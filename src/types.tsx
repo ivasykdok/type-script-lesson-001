@@ -2,13 +2,7 @@ import { z } from "zod";
 
 export const statuses = ["todo", "in progress", "done"] as const;
 
-export interface TaskData {
-  title: string;
-  description?: string;
-  status?: "todo" | "in-progress" | "done";
-  priority?: "low" | "medium" | "high";
-  deadline?: string;
-}
+export type Status = (typeof statuses)[number];
 
 export type Task = {
   id: string;
@@ -18,7 +12,6 @@ export type Task = {
   createdAt: string;
   deadline: string | null;
 };
-
 
 export const taskSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -30,4 +23,6 @@ export const taskSchema = z.object({
 
 export type CreateTaskData = z.infer<typeof taskSchema>;
 
-export type CreateTaskPayload = Omit<CreateTaskData, "createdAt"> & { createdAt: string };
+export type CreateTaskPayload = Omit<CreateTaskData, "createdAt"> & {
+  createdAt: string;
+};

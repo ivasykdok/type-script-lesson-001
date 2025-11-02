@@ -1,4 +1,4 @@
-import type { TaskData } from "../types.tsx";
+import type { Task } from "../types.tsx";
 
 export class ApiService {
   private apiUrl: string;
@@ -7,7 +7,7 @@ export class ApiService {
     this.apiUrl = apiUrl;
   }
 
-  async fetchAllTasks(): Promise<TaskData[]> {
+  async fetchAllTasks(): Promise<Task[]> {
     try {
       const response = await fetch(this.apiUrl, {
         method: "GET",
@@ -29,7 +29,7 @@ export class ApiService {
     }
   }
 
-  async createTask(taskData: TaskData): Promise<TaskData | null> {
+  async createTask(taskData: Task): Promise<Task | null> {
     try {
       const response = await fetch(this.apiUrl, {
         method: "POST",
