@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const Task = () => {
+  const { id } = useParams<{ id: string }>();
+
   return (
     <div>
       <nav>
@@ -9,7 +11,9 @@ const Task = () => {
         </Link>
       </nav>
 
-      <div className="h2"></div>
+      <div className={"content"}>
+        <h2>{id}</h2>
+      </div>
     </div>
   );
 };
