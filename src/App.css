@@ -48,7 +48,7 @@ body {
     justify-content: center;
     width: 100%;
     max-width: 50vw;
-    border-radius: 10px
+    border-radius: 10px;
   }
 
   .create-task {
@@ -92,6 +92,88 @@ body {
     a:before {
       content: "<";
       margin-right: 10px;
+    }
+  }
+
+  form {
+    width: 100%;
+    max-width: 50vw;
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 70px;
+    }
+
+    .wrap {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 30px;
+
+      input,
+      textarea,
+      select {
+        margin-top: 5px;
+        outline: none;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        padding: 2px 5px;
+        height: 30px;
+      }
+
+      select,
+      option {
+        text-transform: capitalize;
+      }
+
+      textarea {
+        height: auto;
+      }
+
+      label {
+        text-transform: uppercase;
+        color: #fff;
+      }
+
+      .box-error {
+        margin-top: 5px;
+        text-align: right;
+      }
+    }
+
+    .save {
+      background-color: rgba(3, 171, 7, 1);
+      height: 40px;
+      width: 150px;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      margin-left: auto;
+      border-radius: 10px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .save[disabled] {
+      background-color: rgba(3, 171, 7, 0.5);
+      color: rgba(0, 0, 0, 0.3);
+    }
+
+    .wrap:last-child {
+      margin-bottom: 0;
+    }
+
+    .wrap.error {
+      input {
+        border-color: red;
+      }
+
+      label,
+      .box-error {
+        color: red;
+      }
     }
   }
 

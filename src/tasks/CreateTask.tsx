@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
-import { taskSchema } from "../types.tsx";
+import { type CreateTaskData, statuses, taskSchema } from "../types.tsx";
 
 const CreateTask = () => {
   const {
@@ -14,6 +14,14 @@ const CreateTask = () => {
     resolver: zodResolver(taskSchema),
   });
 
+  const onSubmit = (data: CreateTaskData) => {
+    console.log(
+      "%c data ",
+      "color: white; background-color: #007acc; border-radius: 4px; font-weight: bold;",
+      data,
+    );
+  };
+
   return (
     <div className={"create-task"}>
       <nav>
@@ -22,8 +30,11 @@ const CreateTask = () => {
         </Link>
       </nav>
 
-      <form>
-        <div className="wrap">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h2 className={"title"}>Create new task</h2>
+        <div
+          className={`wrap ${touchedFields.title && errors.title ? "error" : ""}`}
+        >
           <label htmlFor="title">Title:</label>
           <input
             id={"title"}
@@ -34,6 +45,38 @@ const CreateTask = () => {
             <div className={"box-error"}>{errors.title?.message}</div>
           )}
         </div>
+
+        <div className="wrap">
+          <label htmlFor="description">Description:</label>
+          <textarea id={"description"} rows={5} {...register("description")} />
+        </div>
+
+        <div className="wrap">
+          <label htmlFor="statuses">Status:</label>
+          <select id="statuses" {...register("taskStatus")}>
+            {statuses.map((status, index) => {
+              return (
+                <option key={index} value={status}>
+                  {status}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+
+        <div className="wrap">
+          <label htmlFor="deadline">Deadline</label>
+          <input
+            id="deadline"
+            type="date"
+            {...register("deadline")}
+            min={new Date().toISOString().split("T")[0]}
+          />
+        </div>
+
+        <button className={"save"} type="submit" disabled={!isValid}>
+          Create
+        </button>
       </form>
     </div>
   );

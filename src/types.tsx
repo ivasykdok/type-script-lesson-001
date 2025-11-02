@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const statuses = ["todo", "in progress", "done"] as const;
+
 export interface TaskData {
   title: string;
   description?: string;
@@ -19,3 +21,5 @@ export const taskSchema = z.object({
   createdAt: z.string().optional(),
   deadline: z.string().nullable().optional(),
 });
+
+export type CreateTaskData = z.infer<typeof taskSchema>;
