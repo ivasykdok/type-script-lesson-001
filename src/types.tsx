@@ -10,6 +10,15 @@ export interface TaskData {
   deadline?: string;
 }
 
+export type Task = {
+  id: string;
+  title: string;
+  description: string | null;
+  taskStatus: Status;
+  createdAt: string;
+  deadline: string | null;
+};
+
 
 export const taskSchema = z.object({
   title: z.string().min(1, "Title is required"),
