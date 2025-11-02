@@ -1,12 +1,11 @@
-export const statuses = ["todo", "in progress", "done"] as const;
-
-export type Status = (typeof statuses)[number];
-
-export type Task = {
-  id: string;
+export interface TaskData {
   title: string;
-  description: string | null;
-  taskStatus: Status;
-  createdAt: string;
-  deadline: string | null;
-};
+  description?: string;
+  status?: "todo" | "in-progress" | "done";
+  priority?: "low" | "medium" | "high";
+  deadline?: string;
+}
+
+export interface Task extends TaskData {
+  id: string;
+}

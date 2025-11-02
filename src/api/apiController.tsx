@@ -51,6 +51,6 @@ export class ApiController {
   }
 
   async getAllTasks(): Promise<Task[]> {
-    return await this.apiService.fetchAllTasks();
+    return await this.apiService;
   }
 }
