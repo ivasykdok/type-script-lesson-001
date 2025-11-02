@@ -1,28 +1,3 @@
 {
-  "tasks": [
-    {
-      "id": "465d",
-      "title": "Новий таск",
-      "description": "",
-      "status": "todo",
-      "deadline": null,
-      "createdAt": "2025-11-02T19:32:04.813Z"
-    },
-    {
-      "id": "c4f5",
-      "title": "Перфект",
-      "description": "Роман зможе",
-      "status": "todo",
-      "deadline": "2025-11-16T00:00:00.000Z",
-      "createdAt": "2025-11-02T19:32:25.931Z"
-    },
-    {
-      "id": "415d",
-      "title": "фівфівфів",
-      "description": "вфівфівфівфів",
-      "status": "in progress",
-      "deadline": "2025-11-14T00:00:00.000Z",
-      "createdAt": "2025-11-02T20:25:58.630Z"
-    }
-  ]
+  "tasks": []
 }

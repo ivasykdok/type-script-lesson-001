@@ -19,4 +19,8 @@ export class ApiController {
   async findTaskById(id: string): Promise<Task | null> {
     return await this.apiService.findTaskById(id);
   }
+
+  async removeTaskById(id: string): Promise<boolean> {
+    return await this.apiService.removeTaskById(id);
+  }
 }

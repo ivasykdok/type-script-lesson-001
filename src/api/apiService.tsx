@@ -75,4 +75,30 @@ export class ApiService {
       return null;
     }
   }
+
+  async removeTaskById(id: string): Promise<boolean> {
+    try {
+      const response = await fetch(`${this.apiUrl}/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to delete task with id ${id} (status: ${response.status})`,
+        );
+      }
+
+      return true;
+    } catch (error) {
+      console.error(
+        "%c Error deleting task",
+        "color: white; background-color: #d9534f; border-radius: 4px; font-weight: bold;",
+        error,
+      );
+      return false;
+    }
+  }
 }

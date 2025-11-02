@@ -1,10 +1,11 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ApiController } from "../api/apiController.tsx";
 import type { Task } from "../types.tsx";
 
 const Task = () => {
   const api = new ApiController();
+  const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
 
@@ -24,7 +25,13 @@ const Task = () => {
     }
   }, [id]);
 
+  const removeTaskHandler = async (id: string) => {
+    const result = await api.removeTaskById(id);
 
+    if (result) {
+      navigate("/");
+    }
+  };
 
   return (
     <div className="my-task">
@@ -59,7 +66,14 @@ const Task = () => {
                 {task.description}
               </div>
 
-              <button className={'remove'}>Remove</button>
+              <div className="removeBox">
+                <button
+                  className={"remove"}
+                  onClick={() => removeTaskHandler(task.id)}
+                >
+                  Remove
+                </button>
+              </div>
             </div>
           );
         })()
