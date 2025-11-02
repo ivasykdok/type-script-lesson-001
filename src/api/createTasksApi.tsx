@@ -1,10 +1,16 @@
-import type { CreateTaskData } from "../CreateTaskForm/CreateTaskForm.tsx";
+import { type CreateTaskData } from "../CreateTaskForm/CreateTaskForm.tsx";
+
+export const statuses = ["todo", "in progress", "done"] as const;
+
+export type Status = (typeof statuses)[number];
 
 export type Task = {
   id: string;
   title: string;
   description: string | null;
-  createdAt: string | undefined;
+  taskStatus: Status;
+  createdAt: string;
+  deadline: string | null;
 };
 
 export const fetchAllTasks = async (): Promise<Task[]> => {

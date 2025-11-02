@@ -10,8 +10,36 @@ ul {
 }
 
 .wrapper {
-  display: grid;
-  grid-template-columns: 0.5fr 1.5fr;
+  display: flex;
+  flex-direction: column;
+}
+
+.tasks-title {
+  border-top: 1px solid black;
+  padding-top: 10px;
+}
+
+.box-error {
+  margin-top: 5px;
+  grid-column: 1 / 3;
+}
+
+.list {
+  padding: 0;
+  max-width: 70vw;
+
+  .headline {
+    border-bottom: 1px solid lightblue;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+    grid-column-gap: 50px;
+    text-align: left;
+  }
 }
 
 .insert_data {
@@ -34,4 +62,12 @@ ul {
 
 .read-the-docs {
   color: #888;
+}
+
+.error {
+  color: red;
+
+  input {
+    border-color: red;
+  }
 }
