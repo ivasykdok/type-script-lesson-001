@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.tsx";
 import Homepage from "./pages/Homepage.tsx";
+import CreateTask from "./tasks/CreateTask.tsx";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/tasks/create",
-        element: <div>Task Create</div>,
+        element: <CreateTask />,
       },
       {
         path: "/tasks/:id",

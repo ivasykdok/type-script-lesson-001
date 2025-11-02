@@ -11,8 +11,8 @@ body {
 #root {
   display: flex;
   flex-direction: column;
-  max-width: 1440px;
   margin: 0 auto;
+  height: 100vh;
 }
 
 .header {
@@ -28,6 +28,10 @@ body {
 .homepage {
   padding: 50px;
 
+  .empty {
+    color: #fff;
+  }
+
   .wrapper {
     display: flex;
     justify-content: space-between;
@@ -37,6 +41,14 @@ body {
     margin: 0;
     padding: 0;
     list-style: none;
+    border: 1px solid #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 50vw;
+    border-radius: 10px
   }
 
   .create-task {
@@ -44,13 +56,47 @@ body {
     height: 40px;
     border-radius: 10px;
     cursor: pointer;
-    border: none;
     font-size: 14px;
     line-height: 100%;
+    border: 1px solid transparent;
   }
 
   .create-task:hover {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: transparent;
+    border-color: #fff;
     color: #fff;
+  }
+}
+
+.create-task {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 34.5);
+  position: relative;
+
+  nav {
+    border-bottom: 1px solid #fff;
+    margin: 16px;
+    width: calc(100% - 3rem);
+    display: flex;
+    align-items: center;
+
+    a {
+      padding-bottom: 16px;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    a:before {
+      content: "<";
+      margin-right: 10px;
+    }
+  }
+
+  .go-home {
+    top: 0;
+    right: 0;
   }
 }
