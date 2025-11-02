@@ -15,4 +15,8 @@ export class ApiController {
   async createTask(data: CreateTaskPayload): Promise<Task | null> {
     return await this.apiService.createTask(data);
   }
+
+  async findTaskById(id: string): Promise<Task | null> {
+    return await this.apiService.findTaskById(id);
+  }
 }

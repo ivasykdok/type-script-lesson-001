@@ -31,9 +31,25 @@ export class ApiService {
 
   async findTaskById(id: string): Promise<Task | null> {
     try {
+      const response = await fetch(`${this.apiUrl}/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    } catch(error) {
-      return null
+      if (!response.ok) {
+        throw new Error(
+          `Task with id ${id} not found (status: ${response.status})`,
+        );
+      }
+
+      const task: Task = await response.json();
+
+      return task;
+    } catch (error) {
+      console.error(new Error(`Find task is error: ${error}`));
+      return null;
     }
   }
 
