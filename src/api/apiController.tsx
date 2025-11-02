@@ -44,13 +44,13 @@ import type { Task } from "../types.tsx";
 import { ApiService } from "./apiService.tsx";
 
 export class ApiController {
-  private apiService = ApiService;
+  private apiService: ApiService;
 
   constructor() {
     this.apiService = new ApiService();
   }
 
   async getAllTasks(): Promise<Task[]> {
-    return await this.apiService;
+    return await this.apiService.fetchAllTasks();
   }
 }
