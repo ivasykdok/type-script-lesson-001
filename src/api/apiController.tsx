@@ -1,44 +1,56 @@
 /*
-import { type CreateTaskData } from "../CreateTaskForm/CreateTaskForm.tsx";
+import type { Task, TaskData } from "../types/Task.ts";
+import { TaskService } from "../TaskService/TaskService.ts";
 
-export const statuses = ["todo", "in progress", "done"] as const;
+export class TaskController {
+  private service: TaskService;
 
-export type Status = (typeof statuses)[number];
-
-export type Task = {
-  id: string;
-  title: string;
-  description: string | null;
-  taskStatus: Status;
-  createdAt: string;
-  deadline: string | null;
-};
-
-export const fetchAllTasks = async (): Promise<Task[]> => {
-  const response = await fetch("http://localhost:3000/tasks");
-
-  if (!response.ok) {
-    throw new Error("Error fetch tasks ");
+  constructor() {
+    this.service = new TaskService();
   }
 
-  return response.json();
-};
-
-export const createTask = async (data: CreateTaskData) => {
-  const response = await fetch("http://localhost:3000/tasks", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    throw new Error("Error create tasks ");
+  async getAllTasks(): Promise<Task[]> {
+    return this.service.getAllTasks();
   }
 
-  return response.json();
-};
+  async createTask(taskData: TaskData): Promise<Task | null> {
+    if (taskData.deadline) {
+      const deadlineDate = new Date(taskData.deadline);
+      taskData.deadline = deadlineDate.toISOString(); // зберігаємо у форматі ISO
+      console.log("📅 Formatted deadline:", deadlineDate.toLocaleString());
+    }
+    return this.service.createTask(taskData);
+  }
+
+  async findTaskById(id: string): Promise<Task | null> {
+    return this.service.findTaskById(id);
+  }
+
+  async updateTask(id: string, taskData: TaskData): Promise<Task | null> {
+    return this.service.updateTask(id, taskData);
+  }
+
+  async patchTask(id: string, updates: Partial<TaskData>): Promise<Task | null> {
+    return this.service.patchTask(id, updates);
+  }
+
+  async deleteTask(id: string): Promise<boolean> {
+    return this.service.deleteTask(id);
+  }
+}
 */
 
+import type { Task } from "../types.tsx";
+import { ApiService } from "./apiService.tsx";
 
+export class ApiController {
+  private apiService = ApiService;
+
+  constructor() {
+    this.apiService = new ApiService();
+  }
+
+  async getAllTasks(): Promise<Task[]> {
+    return await this.apiService.fetchAllTasks();
+  }
+}
