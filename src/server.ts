@@ -8,7 +8,7 @@ app.get("/", (req, res) => {
   res.send("Hello Roman");
 });
 
-app.use("/", userRoutes);
+app.use("/users", userRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.message);

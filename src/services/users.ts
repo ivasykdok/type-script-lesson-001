@@ -18,6 +18,7 @@ export const fetchAllUsers = () => {
 
 export const addUser = (user: User) => {
   const id = crypto.randomUUID();
-  users.push({ id, ...user });
-  return user;
+  const newUser = { id, ...user };
+  users.push(newUser);
+  return newUser;
 };
