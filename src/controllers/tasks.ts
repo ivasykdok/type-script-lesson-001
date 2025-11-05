@@ -7,7 +7,6 @@ import {
   updateTaskData,
 } from "../services/tasks.js";
 import { Task } from "../types/tasks.js";
-import { resolve } from "node:dns";
 
 export const getAllTasks = (req: Request, res: Response) => {
   const tasks = fetchAllTasks();
