@@ -4,7 +4,7 @@ import {
   findTaskById,
   getAllTasks,
   updateTask
-} from "../controllers/tasks.js";
+} from "../controllers/task.controller.js";
 const router = Router();
 
 router.get("/", getAllTasks);

@@ -1,7 +1,7 @@
 import express, { Response, Request, NextFunction } from "express";
 import morgan from "morgan";
 import cors from "cors";
-import taskRoutes from "./routes/tasks.js";
+import taskRoutes from "./routes/task.routes.js";
 
 const app = express();
 const PORT = 3000;

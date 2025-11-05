@@ -1,7 +1,7 @@
-import { Task } from "../types/tasks.js";
+import { Task } from "../types/task.types.js";
 import crypto from "crypto";
 
-const tasks: Task[] = [
+const taskService: Task[] = [
   {
     id: "1",
     title: "New Task",
@@ -10,12 +10,12 @@ const tasks: Task[] = [
 ];
 
 export const fetchAllTasks = () => {
-  console.log("tasks");
-  return tasks;
+  console.log("taskService");
+  return taskService;
 };
 
 export const fetchTaskById = (id: string) => {
-  const task = tasks.find((task) => task.id === id);
+  const task = taskService.find((task) => task.id === id);
 
   if (task) return task;
   return null;
@@ -24,32 +24,32 @@ export const fetchTaskById = (id: string) => {
 export const addTask = (task: Task) => {
   const id = crypto.randomUUID();
   const newTask = { id, ...task };
-  tasks.push(newTask);
+  taskService.push(newTask);
   return newTask;
 };
 
 export const updateTaskData = (id: string, taskData: Partial<Task>) => {
-  const index = tasks.findIndex((task) => task.id === id);
+  const index = taskService.findIndex((task) => task.id === id);
 
   if (index === -1) {
     console.warn(`Task with id "${id}" not found`);
     return null;
   }
 
-  tasks[index] = { ...tasks[index], ...taskData };
+  taskService[index] = { ...taskService[index], ...taskData };
 
-  return tasks[index];
+  return taskService[index];
 };
 
 export const deleteTaskData = (id: string) => {
-  const index = tasks.findIndex((task) => task.id === id);
+  const index = taskService.findIndex((task) => task.id === id);
 
   if (index === -1) {
     console.warn(`Task with id "${id}" not found`);
     return null;
   }
 
-  const [deletedTask] = tasks.splice(index, 1);
+  const [deletedTask] = taskService.splice(index, 1);
 
   return deletedTask;
 };

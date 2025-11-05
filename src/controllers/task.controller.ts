@@ -5,8 +5,8 @@ import {
   fetchAllTasks,
   fetchTaskById,
   updateTaskData,
-} from "../services/tasks.js";
-import { Task } from "../types/tasks.js";
+} from "../services/task.service.js";
+import { Task } from "../types/task.types.js";
 
 export const getAllTasks = (req: Request, res: Response) => {
   const tasks = fetchAllTasks();
@@ -40,6 +40,14 @@ export const updateTask = (
 ) => {
   try {
     const { id } = req.params;
+    const { title } = req.body;
+
+    if (!title) {
+      return res
+        .status(400)
+        .json({ error: "Title is required and must be a string" });
+    }
+
     const updatedTask = updateTaskData(id, req.body);
 
     if (!updatedTask) {
