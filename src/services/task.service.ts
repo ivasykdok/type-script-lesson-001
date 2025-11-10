@@ -1,55 +1,43 @@
-import { Task } from "../types/task.types.js";
-import crypto from "crypto";
+import { Task } from "../models/task.model.js";
 
-const taskService: Task[] = [
-  {
-    id: "1",
-    title: "New Task",
-    description: "empty",
-  },
-];
-
-export const fetchAllTasks = () => {
-  console.log("taskService");
-  return taskService;
+export const fetchAllTasks = async () => {
+  const tasks = await Task.findAll();
+  return tasks;
 };
 
-export const fetchTaskById = (id: string) => {
-  const task = taskService.find((task) => task.id === id);
+export const fetchTaskById = async (id: number) => {
+  const task = await Task.findOne({ where: { id }, raw: true });
 
-  if (task) return task;
-  return null;
+  if (!task) return null;
+
+  return task;
 };
 
-export const addTask = (task: Task) => {
-  const id = crypto.randomUUID();
-  const newTask = { id, ...task };
-  taskService.push(newTask);
+export const addTask = async (data: Partial<Task>) => {
+  const newTask = await Task.create(data);
   return newTask;
 };
 
-export const updateTaskData = (id: string, taskData: Partial<Task>) => {
-  const index = taskService.findIndex((task) => task.id === id);
+export const updateTaskData = async (id: number, taskData: Partial<Task>) => {
+  const [affectedRows] = await Task.update(taskData, { where: { id } });
 
-  if (index === -1) {
-    console.warn(`Task with id "${id}" not found`);
-    return null;
-  }
+  if (affectedRows === 0) return null;
 
-  taskService[index] = { ...taskService[index], ...taskData };
-
-  return taskService[index];
+  const updatedTask = await Task.findOne({ where: { id } });
+  return updatedTask;
 };
 
-export const deleteTaskData = (id: string) => {
-  const index = taskService.findIndex((task) => task.id === id);
+export const deleteTaskData = async (id: number) => {
+  const deletedRows = await Task.destroy({ where: { id } });
 
-  if (index === -1) {
-    console.warn(`Task with id "${id}" not found`);
+  if (deletedRows === 0) {
     return null;
   }
 
-  const [deletedTask] = taskService.splice(index, 1);
+  return true;
+};
 
-  return deletedTask;
+export const deleteAllTasksData = async () => {
+  const results = await Task.destroy({ where: {} });
+  return results;
 };

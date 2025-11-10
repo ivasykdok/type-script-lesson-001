@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
   addTask,
+  deleteAllTasksData,
   deleteTaskData,
   fetchAllTasks,
   fetchTaskById,
@@ -8,18 +9,30 @@ import {
 } from "../services/task.service.js";
 import { Task } from "../types/task.types.js";
 
-export const getAllTasks = (req: Request, res: Response) => {
-  const tasks = fetchAllTasks();
-  res.status(200).json(tasks);
+export const getAllTasks = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const tasks = await fetchAllTasks();
+
+    res.status(200).json(tasks);
+  } catch (e) {
+    next(e);
+  }
 };
 
-export const findTaskById = (req: Request<{ id: string }>, res: Response) => {
+export const findTaskById = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
   try {
     const { id } = req.params;
-    const task = fetchTaskById(id);
+    const task = await fetchTaskById(Number(id));
 
     if (!task) {
-      return res.status(404).json({ error: "Task not found" });
+      return res.status(404).json({ error: `Task with id: ${id} not found` });
     }
 
     res.status(200).json(task);
@@ -29,29 +42,36 @@ export const findTaskById = (req: Request<{ id: string }>, res: Response) => {
   }
 };
 
-export const createTask = (req: Request<{}, {}, Task>, res: Response) => {
-  const newTask = addTask(req.body);
-  res.status(201).json(newTask);
+export const createTask = async (
+  req: Request<{}, {}, Partial<Task>>,
+  res: Response,
+) => {
+  try {
+    const { title } = req.body;
+
+    if (!title) {
+      return res.status(400).json({ error: "Title is required" });
+    }
+
+    const newTask = await addTask(req.body);
+    res.status(201).json(newTask);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-export const updateTask = (
-  req: Request<{ id: string }, {}, Task>,
+export const updateTask = async (
+  req: Request<{ id: string }, {}, Partial<Task>>,
   res: Response,
 ) => {
   try {
     const { id } = req.params;
-    const { title } = req.body;
 
-    if (!title) {
-      return res
-        .status(400)
-        .json({ error: "Title is required and must be a string" });
-    }
-
-    const updatedTask = updateTaskData(id, req.body);
+    const updatedTask = await updateTaskData(Number(id), req.body);
 
     if (!updatedTask) {
-      return res.status(404).json({ error: "Task not found" });
+      return res.status(404).json({ error: `Task with id: ${id} not found` });
     }
 
     res.status(200).json(updatedTask);
@@ -61,18 +81,34 @@ export const updateTask = (
   }
 };
 
-export const deleteTask = (req: Request<{ id: string }>, res: Response) => {
+export const deleteTask = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
   try {
     const { id } = req.params;
-    const deletedTask = deleteTaskData(id);
+    const result = await deleteTaskData(Number(id));
 
-    if (!deletedTask) {
+    if (!result) {
       return res.status(404).json({ error: "Task not found" });
     }
 
     return res.status(200).json({
       message: "Task successfully deleted",
-      deletedTask,
+      result,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const deleteAllTasks = async (req: Request, res: Response) => {
+  try {
+    const deletedCount = await deleteAllTasksData();
+    return res.status(200).json({
+      message: `Deleted ${deletedCount} task(s) successfully`,
+      deletedCount,
     });
   } catch (error) {
     console.error(error);

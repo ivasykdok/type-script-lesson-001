@@ -1,19 +1,19 @@
 import { NextFunction, Request, Response, Router } from "express";
-import {
-  createTask,
-  deleteAllTasks,
-  deleteTask,
-  findTaskById,
-  getAllTasks,
-  updateTask,
-} from "../controllers/task.controller.js";
+
 import AppError from "../error.js";
 import { z } from "zod";
+import {
+  createUser,
+  deleteUser,
+  findUserById,
+  getAllUsers,
+  updateUser,
+} from "../controllers/user.controller.js";
 const router = Router();
 
 const queryParamsSchema = z.object({
-  title: z.string().optional(),
-  description: z.string().optional(),
+  username: z.string().optional(),
+  email: z.string().optional(),
 });
 
 function validateQueryParams(req: Request, res: Response, next: NextFunction) {
@@ -26,20 +26,18 @@ function validateQueryParams(req: Request, res: Response, next: NextFunction) {
 }
 
 router.use((req, res, next) => {
-  console.log(`Tasks route middleware: ${req.method} ${req.url}`);
+  console.log(`Users route middleware: ${req.method} ${req.url}`);
   next();
 });
 
-router.get("/", getAllTasks);
+router.get("/", getAllUsers);
 
-router.get("/:id", findTaskById);
+router.get("/:id", findUserById);
 
-router.post("/", createTask);
+router.post("/", createUser);
 
-router.put("/:id", updateTask);
+router.put("/:id", updateUser);
 
-router.delete("/:id", deleteTask);
-
-router.delete("/", deleteAllTasks);
+router.delete("/:id", deleteUser);
 
 export default router;

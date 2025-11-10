@@ -2,6 +2,8 @@ import express, { Response, Request, NextFunction } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import taskRoutes from "./routes/task.routes.js";
+import "./config/database.js";
+import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 const PORT = 3000;
@@ -14,6 +16,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello Roman! API is running");
 });
 
+app.use("/users", userRoutes);
 app.use("/tasks", taskRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
