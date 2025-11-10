@@ -12,7 +12,6 @@ export class TaskService {
     const parsed = TaskArraySchema.safeParse(initialTasks);
     if (!parsed.success) {
       this.tasks = [];
-
       console.error("Дані tasks.json невалідні:", parsed.error.issues);
     } else {
       this.tasks = parsed.data;
@@ -20,109 +19,61 @@ export class TaskService {
     }
   }
 
-  createTask = (taskData: Omit<Task, "id">): Task | null => {
-    const newId = Date.now().toString();
+  createTask(taskData: Omit<Task, "id">): Task | null {
+    const newTask: Task = { id: Date.now().toString(), ...taskData };
 
-    const taskToParse: Task = {
-      id: newId,
-      ...taskData,
-    };
-
-    const parsed = TaskSchema.safeParse(taskToParse);
-
+    const parsed = TaskSchema.safeParse(newTask);
     if (!parsed.success) {
-      console.error(
-        "Не вдалося створити таск, дані невалідні:",
-        parsed.error.issues,
-      );
+      console.error("Не вдалося створити таск:", parsed.error.issues);
       return null;
     }
 
     this.tasks.push(parsed.data);
-
-    console.log(`Таск "${parsed.data.title}" створено з id=${parsed.data.id}`);
+    console.log(`Таск "${parsed.data.title}" створено`);
     return parsed.data;
-  };
+  }
 
-  findTaskById = (id: string) => {
-    const task = this.tasks.find((t) => t.id === id);
+  findTaskById(id: string): Task | null {
+    return this.tasks.find((t) => t.id === id) ?? null;
+  }
 
-    if (!task) {
-      console.warn(`Завдання з id="${id}" не знайдено.`);
-      return null;
-    }
-
-    return task;
-  };
-
-  updateTask = (
-    id: string,
-    updates: Partial<Omit<Task, "id">>,
-  ): Task | null => {
+  updateTask(id: string, updates: Partial<Omit<Task, "id">>): Task | null {
     const index = this.tasks.findIndex((t) => t.id === id);
-    if (index === -1) {
-      console.warn(`Завдання з id="${id}" не знайдено.`);
-      return null;
-    }
+    if (index === -1) return null;
 
-    const existingTask = this.tasks[index];
-    if (!existingTask) {
-      console.error("Не вдалося знайти таск у масиві.");
-      return null;
-    }
-
-    const updatedTask = {
-      ...existingTask,
-      ...updates,
-      status: updates.status ?? existingTask.status,
-      priority: updates.priority ?? existingTask.priority,
-    };
-
+    const updatedTask = { ...this.tasks[index], ...updates };
     const parsed = TaskSchema.safeParse(updatedTask);
     if (!parsed.success) {
-      console.error(
-        "Не вдалося оновити таск, дані невалідні:",
-        parsed.error.issues,
-      );
+      console.error("Не вдалося оновити таск:", parsed.error.issues);
       return null;
     }
 
     this.tasks[index] = parsed.data;
-
-    console.log("Оновлено:", parsed.data);
+    console.log(`Таск "${parsed.data.title}" оновлено`);
     return parsed.data;
-  };
+  }
 
-  deleteTask = (id: string): boolean => {
+  deleteTask(id: string): boolean {
     const index = this.tasks.findIndex((t) => t.id === id);
-    if (index === -1) {
-      console.warn(`Завдання з id="${id}" не знайдено.`);
-      return false;
-    }
+    if (index === -1) return false;
 
     this.tasks.splice(index, 1);
-    console.log(`Завдання з id="${id}" успішно видалено.`);
+    console.log(`Таск з id="${id}" видалено`);
     return true;
-  };
+  }
 
-  filterTasks = (filters: FilterOptions): Task[] => {
+  filterTasks(filters: FilterOptions): Task[] {
     return this.tasks.filter((task) => {
       const createdAt = new Date(task.createdAt);
-
-      const statusMatch = !filters.status || task.status === filters.status;
-      const priorityMatch =
-        !filters.priority || task.priority === filters.priority;
-
-      const createdAfterMatch =
-        !filters.createdAfter || createdAt >= new Date(filters.createdAfter);
-      const createdBeforeMatch =
-        !filters.createdBefore || createdAt <= new Date(filters.createdBefore);
-
       return (
-        statusMatch && priorityMatch && createdAfterMatch && createdBeforeMatch
+        (!filters.status || task.status === filters.status) &&
+        (!filters.priority || task.priority === filters.priority) &&
+        (!filters.createdAfter ||
+          createdAt >= new Date(filters.createdAfter)) &&
+        (!filters.createdBefore || createdAt <= new Date(filters.createdBefore))
       );
     });
-  };
+  }
 
   isTaskCompletedBeforeDeadline = (id: string): boolean | null => {
     const task = this.tasks.find((t) => t.id === id);
@@ -149,13 +100,3 @@ export class TaskService {
     return completedBeforeDeadline;
   };
 }
-
-
-
-
-
-
-
-
-
-

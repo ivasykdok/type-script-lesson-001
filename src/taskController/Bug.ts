@@ -1,12 +1,15 @@
 import { BaseTask } from "./BaseTask";
-import { Task } from "../constants/Types";
+import { priorities } from "../constants/constants";
 
 export class Bug extends BaseTask {
   severity: string;
 
-  constructor(...args: [Partial<Task> & { id: string; title: string }, string]) {
-    super(args[0]);
-    this.severity = args[1];
+  constructor(
+    severity: (typeof priorities)[number],
+    ...args: ConstructorParameters<typeof BaseTask>
+  ) {
+    super(...args);
+    this.severity = severity;
   }
 
   getTaskInfo() {

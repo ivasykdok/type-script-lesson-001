@@ -1,4 +1,4 @@
-import { Task } from "../constants/Types"; // тип, згенерований через z.infer<typeof TaskSchema>
+import { Priority, Status, Task } from "../constants/Types"; // тип, згенерований через z.infer<typeof TaskSchema>
 import { DEFAULT_STATUS, DEFAULT_PRIORITY } from "../constants/constants";
 
 export class BaseTask implements Task {
@@ -7,8 +7,8 @@ export class BaseTask implements Task {
   description?: string | undefined;
   createdAt: string | Date;
   deadline: string | Date;
-  status: "todo" | "in_progress" | "done";
-  priority: "low" | "medium" | "high";
+  status: Status;
+  priority: Priority;
 
   constructor(task: Partial<Task> & { id: string; title: string }) {
     this.id = task.id;

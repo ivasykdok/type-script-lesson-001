@@ -1,15 +1,25 @@
 import { BaseTask } from "./BaseTask";
-import { Task } from "../constants/Types";
 
 export class Epic extends BaseTask {
   tasks: BaseTask[];
 
-  constructor(...args: [Partial<Task> & { id: string; title: string }, BaseTask[]?]) {
-    super(args[0]);
-    this.tasks = args[1] ?? [];
+  constructor({
+    tasks = [],
+    ...taskData
+  }: { tasks?: BaseTask[] } & ConstructorParameters<typeof BaseTask>[0]) {
+    super(taskData);
+    this.tasks = tasks;
   }
 
   getTaskInfo() {
     return `Epic: ${this.title}, Tasks count: ${this.tasks.length}`;
+  }
+
+  addTask(task: BaseTask) {
+    this.tasks.push(task);
+  }
+
+  removeTask(taskId: string) {
+    this.tasks = this.tasks.filter((task) => task.id !== taskId);
   }
 }
