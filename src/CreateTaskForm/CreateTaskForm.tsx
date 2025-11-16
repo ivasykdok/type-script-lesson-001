@@ -1,23 +1,13 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { createTask, fetchAllTasks } from "../api/createTasksApi.tsx";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  createTask,
-  fetchAllTasks,
+  type CreateTaskData,
   statuses,
   type Task,
-} from "../api/createTasksApi.tsx";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-
-const taskSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string(),
-  taskStatus: z.enum(statuses).default("todo"),
-  createdAt: z.string().optional(),
-  deadline: z.string().nullable().optional(),
-});
-
-export type CreateTaskData = z.infer<typeof taskSchema>;
+  taskSchema,
+} from "../types/Types.tsx";
 
 const CreateTaskForm = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -45,7 +35,7 @@ const CreateTaskForm = () => {
     const results = await createTask({
       ...data,
       createdAt: new Date().toISOString(),
-      deadline: data.deadline ? new Date(data.deadline).toISOString() : null,
+      deadline: data.deadline || undefined,
     });
 
     if (results.id) {
@@ -56,7 +46,7 @@ const CreateTaskForm = () => {
 
   return (
     <>
-      <div className="wrapper">
+      <div className={"wrapper"}>
         <div className="insert_data">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div
@@ -91,14 +81,14 @@ const CreateTaskForm = () => {
               </select>
             </div>
 
-            <div className="wrap">
-              <label htmlFor="deadline"></label>
-              <input
-                id="deadline"
-                type="date"
-                {...register("deadline")}
-                min={new Date().toISOString().split("T")[0]}
-              />
+            <div
+              className={`wrap ${touchedFields.deadline && errors.deadline ? "error" : ""}`}
+            >
+              <label htmlFor="deadline">Deadline</label>
+              <input id="deadline" type="date" {...register("deadline")} />
+              {errors.deadline && (
+                <div className="box-error">{errors.deadline.message}</div>
+              )}
             </div>
 
             <button type="submit" disabled={!isValid}>

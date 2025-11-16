@@ -1,20 +1,10 @@
-import { type CreateTaskData } from "../CreateTaskForm/CreateTaskForm.tsx";
-
-export const statuses = ["todo", "in progress", "done"] as const;
+import { type CreateTaskData, statuses, type Task } from "../types/Types.tsx";
+import { API_URL } from "./config.ts";
 
 export type Status = (typeof statuses)[number];
 
-export type Task = {
-  id: string;
-  title: string;
-  description: string | null;
-  taskStatus: Status;
-  createdAt: string;
-  deadline: string | null;
-};
-
 export const fetchAllTasks = async (): Promise<Task[]> => {
-  const response = await fetch("http://localhost:3000/tasks");
+  const response = await fetch(API_URL);
 
   if (!response.ok) {
     throw new Error("Error fetch tasks ");
@@ -24,13 +14,19 @@ export const fetchAllTasks = async (): Promise<Task[]> => {
 };
 
 export const createTask = async (data: CreateTaskData) => {
-  const response = await fetch("http://localhost:3000/tasks", {
+  const response = await fetch(API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
   });
+  
+  console.log(
+    "%c response ",
+    "color: white; background-color: #007acc; border-radius: 4px; font-weight: bold;",
+    response
+  );
 
   if (!response.ok) {
     throw new Error("Error create tasks ");

@@ -22,6 +22,8 @@ ul {
 .box-error {
   margin-top: 5px;
   grid-column: 1 / 3;
+  color: red;
+  text-align: center;
 }
 
 .list {
@@ -66,8 +68,7 @@ ul {
 
 .error {
   color: red;
-
   input {
-    border-color: red;
+    border: 1px solid red;
   }
 }
