@@ -1,10 +1,10 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ApiController } from "../api/apiController.tsx";
 import type { Task } from "../types.tsx";
+import api from "../api/apiService.tsx";
 
-const Task = () => {
-  const api = new ApiController();
+
+const TaskPage = () => {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
@@ -81,4 +81,4 @@ const Task = () => {
     </div>
   );
 };
-export default Task;
+export default TaskPage;

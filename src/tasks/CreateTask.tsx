@@ -1,25 +1,29 @@
 import { useForm } from "react-hook-form";
+import api from "../api/apiService.tsx";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
 import {
   type CreateTaskData,
   type CreateTaskPayload,
   statuses,
-  taskSchema,
+  priorities,
+  taskSchema
 } from "../types.tsx";
-import { ApiController } from "../api/apiController.tsx";
 
 const CreateTask = () => {
   const navigate = useNavigate();
-  const api = new ApiController();
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { isValid, errors, touchedFields },
-  } = useForm({
+  } = useForm<CreateTaskData>({
     mode: "onTouched",
     resolver: zodResolver(taskSchema),
+    defaultValues: {
+      status: "todo",
+    },
   });
 
   const onSubmit = async (data: CreateTaskData) => {
@@ -28,53 +32,68 @@ const CreateTask = () => {
       createdAt: new Date().toISOString(),
       deadline: data.deadline ? new Date(data.deadline).toISOString() : null,
     };
-    const results = await api.createTask(payload);
 
-    if (results) {
+    const result = await api.createTask(payload);
+
+    if (result) {
       reset();
       navigate("/");
     }
   };
 
   return (
-    <div className={"create-task"}>
+    <div className="create-task">
       <nav>
-        <Link className={"go-home"} to={"/"}>
+        <Link className="go-home" to="/">
           Home
         </Link>
       </nav>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h2 className={"title"}>Create new task</h2>
+        <h2 className="title">Create new task</h2>
+
         <div
           className={`wrap ${touchedFields.title && errors.title ? "error" : ""}`}
         >
           <label htmlFor="title">Title:</label>
           <input
-            id={"title"}
+            id="title"
             type="text"
-            {...register("title", { required: "Field is required" })}
+            {...register("title")}
           />
           {errors.title && (
-            <div className={"box-error"}>{errors.title?.message}</div>
+            <div className="box-error">{errors.title.message}</div>
           )}
         </div>
 
         <div className="wrap">
           <label htmlFor="description">Description:</label>
-          <textarea id={"description"} rows={5} {...register("description")} />
+          <textarea
+            id="description"
+            rows={5}
+            {...register("description")}
+          />
+        </div>
+
+        <div className="wrap">
+          <label htmlFor="priorities">Priority:</label>
+          <select id="priorities" {...register("priority")}>
+            {priorities.map((priority, index) => (
+              <option key={index} value={priority}>
+                {priority}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="wrap">
           <label htmlFor="statuses">Status:</label>
           <select id="statuses" {...register("status")}>
-            {statuses.map((status, index) => {
-              return (
-                <option key={index} value={status}>
-                  {status}
-                </option>
-              );
-            })}
+            {statuses.map((status, index) => (
+              <option key={index} value={status}>
+                {status}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -88,11 +107,12 @@ const CreateTask = () => {
           />
         </div>
 
-        <button className={"save"} type="submit" disabled={!isValid}>
+        <button className="save" type="submit" disabled={!isValid}>
           Create
         </button>
       </form>
     </div>
   );
 };
+
 export default CreateTask;

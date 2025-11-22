@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.tsx";
 import Homepage from "./pages/Homepage.tsx";
 import CreateTask from "./tasks/CreateTask.tsx";
-import TaskComponent from "./components/Task.tsx";
+import Task from "./components/Task.tsx";
 
 const router = createBrowserRouter([
   {
@@ -14,16 +14,12 @@ const router = createBrowserRouter([
         element: <Homepage />,
       },
       {
-        path: "/tasks",
-        element: <div>Task List</div>,
-      },
-      {
         path: "/tasks/create",
         element: <CreateTask />,
       },
       {
         path: "/tasks/:id",
-        element: <TaskComponent />,
+        element: <Task />,
       },
     ],
   },

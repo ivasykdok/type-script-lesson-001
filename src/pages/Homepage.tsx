@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ApiController } from "../api/apiController.tsx";
 import type { Task } from "../types.tsx";
+import api from "../api/apiService.tsx";
+
 
 const Homepage = () => {
   const navigate = useNavigate();
-  const api = new ApiController();
 
   const [taskList, setTaskList] = useState<Task[]>([]);
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const tasks = await api.getAllTasks();
+      const tasks = await api.fetchAllTasks();
 
       setTaskList(tasks);
     };
@@ -48,6 +48,7 @@ const Homepage = () => {
                   <span>{task.description}</span>
                   <span>{deadline}</span>
                   <span>{task.taskStatus}</span>
+                  <span>{task.priority}</span>
                 </li>
               );
             })

@@ -1,6 +1,6 @@
 import type { CreateTaskPayload, Task } from "../types.tsx";
 
-export class ApiService {
+class ApiService {
   private apiUrl: string;
 
   constructor(apiUrl: string = "http://localhost:3000/tasks") {
@@ -102,3 +102,5 @@ export class ApiService {
     }
   }
 }
+
+export default new ApiService;
