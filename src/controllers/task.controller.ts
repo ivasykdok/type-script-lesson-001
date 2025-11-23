@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
   addTask,
   deleteTaskData,
@@ -7,6 +7,7 @@ import {
   updateTaskData,
 } from "../services/task.service.js";
 import { Task } from "../types/task.types.js";
+import AppError from "../error";
 
 export const getAllTasks = (req: Request, res: Response) => {
   const tasks = fetchAllTasks();
@@ -29,9 +30,23 @@ export const findTaskById = (req: Request<{ id: string }>, res: Response) => {
   }
 };
 
-export const createTask = (req: Request<{}, {}, Task>, res: Response) => {
-  const newTask = addTask(req.body);
-  res.status(201).json(newTask);
+export const createTask = (
+  req: Request<{}, {}, Task>,
+  res: Response,
+  next: NextFunction,
+) => {
+  const title = req.body.title;
+
+  try {
+    if (!title) {
+      throw new AppError("Title is require", 400);
+    } else {
+      const newTask = addTask(req.body);
+      res.status(201).json(newTask);
+    }
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const updateTask = (

@@ -1,13 +1,7 @@
 import { Task } from "../types/task.types.js";
 import crypto from "crypto";
 
-const taskService: Task[] = [
-  {
-    id: "1",
-    title: "New Task",
-    description: "empty",
-  },
-];
+const taskService: Task[] = [];
 
 export const fetchAllTasks = () => {
   console.log("taskService");
@@ -21,9 +15,16 @@ export const fetchTaskById = (id: string) => {
   return null;
 };
 
-export const addTask = (task: Task) => {
+export const addTask = (task: Omit<Task, "id" | "createdAt">) => {
   const id = crypto.randomUUID();
-  const newTask = { id, ...task };
+  const createdAt = new Date().toISOString();
+
+  const newTask: Task = {
+    id,
+    createdAt,
+    ...task,
+  };
+
   taskService.push(newTask);
   return newTask;
 };
@@ -36,7 +37,12 @@ export const updateTaskData = (id: string, taskData: Partial<Task>) => {
     return null;
   }
 
-  taskService[index] = { ...taskService[index], ...taskData };
+  const { id: _, createdAt: __, ...safeData } = taskData;
+
+  taskService[index] = {
+    ...taskService[index],
+    ...safeData
+  };
 
   return taskService[index];
 };
