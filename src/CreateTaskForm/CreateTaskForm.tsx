@@ -14,7 +14,6 @@ const CreateTaskForm = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { isValid, errors, touchedFields },
   } = useForm({
     mode: "onTouched",
@@ -32,16 +31,11 @@ const CreateTaskForm = () => {
   }, []);
 
   const onSubmit = async (data: CreateTaskData) => {
-    const results = await createTask({
+    await createTask({
       ...data,
-      createdAt: new Date().toISOString(),
-      deadline: data.deadline || undefined,
+      createdAt: new Date(),
+      deadline: data.deadline,
     });
-
-    if (results.id) {
-      await fetchTaskData();
-      reset();
-    }
   };
 
   return (
@@ -53,11 +47,7 @@ const CreateTaskForm = () => {
               className={`wrap ${touchedFields.title && errors.title ? "error" : ""}`}
             >
               <label htmlFor="title">Title:</label>
-              <input
-                id={"title"}
-                type="text"
-                {...register("title", { required: "Field is required" })}
-              />
+              <input id={"title"} type="text" {...register("title")} />
               {errors.title && (
                 <div className={"box-error"}>{errors.title?.message}</div>
               )}
