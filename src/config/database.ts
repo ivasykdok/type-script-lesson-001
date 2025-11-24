@@ -1,22 +1,52 @@
 import { Sequelize } from "sequelize-typescript";
 import { Task } from "../models/task.model.js";
 import { User } from "../models/user.model.js";
+import { Dialect } from "sequelize";
+import dotenv from "dotenv";
 
-const sequelize = new Sequelize({
-  dialect: "postgres",
-  host: "localhost",
-  port: 5432,
-  database: "db_dev",
-  username: "db_user",
-  password: "123",
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV || "development"}`,
+});
+
+interface DBConfig {
+  [key: string]: {
+    username?: string;
+    password?: string;
+    database?: string;
+    host?: string;
+    dialect: Dialect;
+    storage?: string;
+    logging?: boolean;
+  };
+}
+
+const config: DBConfig = {
+  development: {
+    username: process.env.DB_USER!,
+    password: process.env.DB_PASSWORD!,
+    database: process.env.DB_NAME!,
+    host: process.env.DB_HOST!,
+    dialect: "postgres",
+  },
+  test: {
+    dialect: "sqlite",
+    storage: ":memory",
+    logging: false,
+  },
+};
+
+const env = process.env.NODE_ENV || "development";
+
+const db = new Sequelize({
+  ...config[env],
   models: [Task, User],
 });
 
-sequelize.authenticate().then(() => {
+db.authenticate().then(() => {
   console.log("DB Started");
 });
-sequelize.sync({ alter: true }).then(() => {
+db.sync({ alter: true }).then(() => {
   console.log("All models");
 });
 
-export default sequelize;
+export default db;

@@ -15,7 +15,8 @@ export const getAllUsers = async (
   next: NextFunction,
 ) => {
   try {
-    const users = await fetchAllUsers();
+    const queryParams = req.query;
+    const users = await fetchAllUsers(queryParams);
 
     res.status(200).json(users);
   } catch (e) {

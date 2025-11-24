@@ -2,10 +2,10 @@ import "reflect-metadata";
 import {
   AllowNull,
   Column,
-  DataType,
+  DataType, Default,
   HasMany,
   Model,
-  Table,
+  Table
 } from "sequelize-typescript";
 import { Task } from "./task.model.js";
 
@@ -18,6 +18,14 @@ export class User extends Model {
   @AllowNull(false)
   @Column({ type: DataType.STRING, validate: { isEmail: true } })
   declare email: string;
+
+  @AllowNull(true)
+  @Default(true)
+  @Column(DataType.BOOLEAN)
+  declare active: boolean;
+
+  @Column(DataType.DATE)
+  declare lastLoginAt: Date;
 
   @HasMany(() => Task)
   tasks: Task[] | undefined;

@@ -1,9 +1,38 @@
 import { User } from "../models/user.model.js";
+import { Op } from "sequelize";
 
-export const fetchAllUsers = async () => {
+interface Filters {
+  active?: boolean | undefined;
+  lastLoginAt?: Date | undefined;
+}
+
+export const fetchAllUsers = async (filters?: Filters) => {
+  const appliedFilters = {};
+
+  if (filters?.lastLoginAt) {
+    const lastLoginAt = new Date(filters.lastLoginAt);
+
+    Object.assign(appliedFilters, {
+      lastLoginAt: {
+        [Op.gte]: lastLoginAt,
+      },
+    });
+  }
+
+  if (filters?.active) {
+    Object.assign(appliedFilters, { active: filters.active });
+  }
+
   const users = await User.findAll({
+    where: {
+      [Op.and]: {
+        ...appliedFilters,
+      },
+    },
+
     include: ["tasks"],
   });
+
   return users;
 };
 
