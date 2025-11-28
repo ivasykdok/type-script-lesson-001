@@ -1,13 +1,8 @@
-export default class AppError extends Error {
-  public statusCode: number;
-  public isOperational: boolean;
-
-  constructor(message: string, statusCode = 500, isOperational = true) {
+class AppError extends Error {
+  statusCode: number;
+  constructor(message: string, statusCode = 500) {
     super(message);
     this.statusCode = statusCode;
-    this.isOperational = isOperational;
-
-    Object.setPrototypeOf(this, new.target.prototype);
-    Error.captureStackTrace(this, this.constructor);
   }
 }
+export default AppError;

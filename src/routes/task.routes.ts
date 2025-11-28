@@ -1,45 +1,21 @@
 import { NextFunction, Request, Response, Router } from "express";
-import {
-  createTask,
-  deleteAllTasks,
-  deleteTask,
-  findTaskById,
-  getAllTasks,
-  updateTask,
-} from "../controllers/task.controller.js";
-import AppError from "../error.js";
-import { z } from "zod";
+
+import { createTask, deleteTask, findTaskById, getTasks, updateTask } from "../controller/task.controller";
 const router = Router();
 
-const queryParamsSchema = z.object({
-  title: z.string().optional(),
-  description: z.string().optional(),
-});
-
-function validateQueryParams(req: Request, res: Response, next: NextFunction) {
-  try {
-    queryParamsSchema.parse(req.query);
-    next();
-  } catch (error) {
-    next(new AppError("Invalid query parametrs", 400));
-  }
-}
-
-router.use((req, res, next) => {
+router.use((req: Request, res: Response, next: NextFunction) => {
   console.log(`Tasks route middleware: ${req.method} ${req.url}`);
   next();
 });
 
-router.get("/", getAllTasks);
+router.get("/", getTasks);
 
 router.get("/:id", findTaskById);
 
 router.post("/", createTask);
 
-router.put("/:id", updateTask);
-
 router.delete("/:id", deleteTask);
 
-router.delete("/", deleteAllTasks);
+router.put("/:id", updateTask);
 
 export default router;
